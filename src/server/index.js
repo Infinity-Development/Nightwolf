@@ -1,4 +1,3 @@
-
 const express = require('express');
 const fetch = require('node-fetch');
 const { registerFont } = require('canvas');
@@ -22,42 +21,30 @@ app.get('/', (req, res) => {
   res.status(200).json({
     message: 'Welcome to the IBL Widget API',
     error: false,
-    fatal: false,
-    status: 200
   })
 });
 
+const themes = {
+	"violet": "#8b5cec",
+	"blue": "#3b82f6",
+	"rose": "#ef4444",
+	"amber": "#10b981",
+	"emerald": "#10b981",
+	"summer": "#e35335",
+	"default": "#472782"
+}
+
+const bgs = {
+	"dark": "#000000",
+	"light": "#16151d",
+	"default": "#271B41"
+}
+
 app.get('/bot/:botID', async (req, res) => {
-  res.setHeader('mime-type', 'png/image');
-  res.setHeader('Content-Type', 'image/png');
+  res.setHeader('Content-Type', 'image/png'); // Set png as mime type
 
-  let theme;
-
-  if (req.query.accent == 'violet') {
-    theme = '#8b5cec'
-  } else if (req.query.accent == 'blue') {
-    theme = '#3b82f6'
-  } else if (req.query.accent == 'rose') {
-    theme = '#ef4444'
-  } else if (req.query.accent == 'amber') {
-    theme = '#f59e0b'
-  } else if (req.query.accent == 'emerald') {
-    theme = '#10b981'
-  } else if (req.query.accent == 'summer') {
-    theme = '#e35335'
-  } else {
-    theme = '#472782'
-  }
-
-  let bg;
-
-  if (req.query.theme === 'dark') {
-    bg = '#000000'
-  } else if (req.query.theme === 'light') {
-    bg = '#16151d'
-  } else {
-    bg = '#271B41'
-  }
+  let theme = themes[req.query.accent] || themes["default"];
+  let bg = bgs[req.query.theme] || bgs["default"];
 
   let spider = await fetch(`https://spider.infinitybots.gg/bots/${req.params.botID}`, {
     method: 'GET'
@@ -72,7 +59,6 @@ app.get('/bot/:botID', async (req, res) => {
   let bot = await spider.json();
 
   try {
-
     registerFont(path.join(__dirname, '../../public/fonts/montserrat/static/Montserrat-Bold.ttf'),{ family: 'Montserrat-Bold' });
 
     let bot_avatar = decodeURIComponent(bot.user.avatar)
