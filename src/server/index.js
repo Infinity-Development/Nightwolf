@@ -57,7 +57,14 @@ app.get('/bot/:botID', async (req, res) => {
   let bot = await spider.json();
 
   try {
-    registerFont(path.join(__dirname, '../../public/fonts/montserrat/static/Montserrat-Bold.ttf'),{ family: 'Montserrat-Bold' });
+    function fontFile(dir, name) {
+      return path.join(__dirname, dir, name)
+    }
+
+    registerFont(fontFile('../../public/fonts/montserrat/static/', 'Montserrat-Bold.ttf'), { 
+      family: 'montserrat', 
+      weight: 'bold'
+    })
 
     let bot_avatar = decodeURIComponent(bot.user.avatar)
     .replace('.png', '.png?size=512')
@@ -65,7 +72,7 @@ app.get('/bot/:botID', async (req, res) => {
     
     let avatar = await resolveImage(bot_avatar);
     
-    let icon = await resolveImage('https://cdn.infinitybots.xyz/images/png/Infinity.png');
+    let icon = await resolveImage('https://cdn.infinitybots.xyz/images/core/InfinityNewTrans.png');
     
     let image;
 
@@ -74,7 +81,7 @@ app.get('/bot/:botID', async (req, res) => {
         .setColor(bg)
         .printRoundedRectangle(0, 0, 400, 240, 10)
         .setTextAlign('left')
-        .setTextFont('28px Montserrat-Bold')
+        .setTextFont('28px montserrat')
         .setColor(theme)
         .printRoundedRectangle(0, 215, 400, 25, 5)
         .printRoundedRectangle(0, 0, 400, 40, 10)
@@ -108,22 +115,19 @@ app.get('/bot/:botID', async (req, res) => {
         .printText(`${bot.owner.username.length > 12 ? bot.owner.username.slice(0, 12) + '...' : bot.owner.username}#${bot.owner.discriminator}`,20,137,)
         .printText(`${bot.library}`, 217, 137)
         .setTextSize(17)
-        .printWrappedText(bot.short, 20, 60, 350, 15)
+        .printWrappedText(bot.short.length > 75 ? bot.short.slice(0, 75) + '...' : bot.short, 20, 60, 350, 15)
         .setTextSize(20)
         .printText(bot.user.username.length > 25 ? bot.user.username.slice(0, 25) + '...' : bot.user.username,40,25,)
         .printCircularImage(avatar, 20, 20, 15, 10, 5, true)
-        .printCircularImage(icon, 20, 227, 10, 10, 5, true);
-
-      /**if (bot.certified) {
-        image.setTextFont('8px Quicksand').printText('CERTIFIED', 40, 35);
-      }*/
+        .printCircularImage(icon, 20, 227, 10, 10, 5, true)
+        .setTextFont('10px montserrat').printText(bot.type.toUpperCase() + " BOT", 310, 20);
 
     } else if (req.query.size == 'small') {
       image = new Canvas(400, 140)
         .setColor(bg)
         .printRoundedRectangle(0, 0, 400, 150, 10)
         .setTextAlign('left')
-        .setTextFont('28px Montserrat')
+        .setTextFont('28px montserrat')
         .setColor(theme)
         .printRoundedRectangle(0, 115, 400, 25, 5)
         .printRoundedRectangle(0, 0, 400, 40, 10)
@@ -155,16 +159,15 @@ app.get('/bot/:botID', async (req, res) => {
         .setTextSize(20)
         .printText(bot.user.username.length > 25 ? bot.user.username.slice(0, 25) + '...' : bot.user.username,40,25,)
         .printCircularImage(avatar, 20, 20, 15, 10, 5, true)
-        .printCircularImage(icon, 20, 127, 10, 10, 5, true);
-      /**if (bot.certified) {
-        image.setTextFont('8px Quicksand').printText('CERTIFIED', 40, 35);
-      }*/
+        .printCircularImage(icon, 20, 127, 10, 10, 5, true)
+        .setTextFont('10px montserrat').printText(bot.type.toUpperCase() + " BOT", 310, 20);
+
     } else {
       image = new Canvas(400, 180)
         .setColor(bg)
         .printRoundedRectangle(0, 0, 400, 180, 10)
         .setTextAlign('left')
-        .setTextFont('28px Montserrat-Bold')
+        .setTextFont('28px montserrat')
         .setColor(theme)
         .printRoundedRectangle(0, 155, 400, 25, 5)
         .printRoundedRectangle(0, 0, 400, 40, 10)
@@ -195,7 +198,7 @@ app.get('/bot/:botID', async (req, res) => {
         )
         .setTextSize(17)
         .printWrappedText(
-          bot.short.length > 75 ? bot.short.slice(0, 75) + '...' : bot.short,
+          bot.short.length > 42 ? bot.short.slice(0, 42) + '...' : bot.short,
           20,
           60,
           350,
@@ -205,7 +208,7 @@ app.get('/bot/:botID', async (req, res) => {
         .printText(bot.user.username.length > 25 ? bot.user.username.slice(0, 25) + '...' : bot.user.username,40,25,)
         .printCircularImage(avatar, 20, 20, 15, 10, 5, true)
         .printCircularImage(icon, 20, 167, 10, 10, 5, true)
-        .setTextFont('10px Montserrat').printText(bot.type.toUpperCase() + " BOT", 310, 20);
+        .setTextFont('10px montserrat').printText(bot.type.toUpperCase() + " BOT", 310, 20);
     }
     res.writeHead(200, { 'Content-Type': 'image/png' });
     res.end(await image.toBuffer(), 'binary');
@@ -220,5 +223,15 @@ app.get('/bot/:botID', async (req, res) => {
     })
   }
 })
+
+app.use((req, res, next) => {
+  res.status(404).json({
+    message: 'You seem lost, you may need to reference our widget docs here: https://docs.botlist.site/resources/widgets',
+    error: true,
+    fatal: false,
+    status: 404
+  })
+});
+
 
 module.exports = app
