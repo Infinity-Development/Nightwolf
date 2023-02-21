@@ -41,8 +41,6 @@ const bgs = {
 }
 
 app.get('/bot/:botID', async (req, res) => {
-  res.setHeader('Content-Type', 'image/png'); // Set png as mime type
-
   let theme = themes[req.query.accent] || themes["default"];
   let bg = bgs[req.query.theme] || bgs["default"];
 
