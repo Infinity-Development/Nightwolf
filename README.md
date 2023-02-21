@@ -30,3 +30,12 @@ API Server for handling the Infinity Bot List Widgets
 > NOTE: We have a default widget available by providing no query
 
 > NOTE: All query params are optional (example: you can use theme without any other query's)
+
+
+---
+
+## Examples
+
+- `https://widgets.infinitybots.gg/bot/187636089073172481?size=large`
+- `https://widgets.infinitybots.gg/bot/187636089073172481?size=large&theme=light`
+- `https://widgets.infinitybots.gg/bot/187636089073172481?size=large&theme=light&accent=violet`
