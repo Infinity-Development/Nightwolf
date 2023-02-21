@@ -1,0 +1,24 @@
+{
+  "name": "@infinity/nightwolf",
+  "version": "1.0.0",
+  "description": "API Server for handling the Infinity Bot List Widgets",
+  "main": "index.js",
+
+  "scripts": {
+    "serve": "nodemon --watch . index.js",
+    "start": "node index.js"
+  },
+
+  "author": "Toxic Dev",
+  
+  "dependencies": {
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.1",
+    "canvas": "^2.6.1",
+    "canvas-constructor": "^4.1.0"
+  },
+  
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
