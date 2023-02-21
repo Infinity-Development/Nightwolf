@@ -62,10 +62,14 @@ app.get('/bot/:botID', async (req, res) => {
   let spider = await fetch(`https://spider.infinitybots.gg/bots/${req.params.botID}`, {
     method: 'GET'
   });
+  
+  if(!spider.ok) {
+    let json = await spider.json()
+    res.status(spider.status).json(json)
+    return
+  }
 
   let bot = await spider.json();
-
-  //res.status(200).json(bot);
 
   try {
 
@@ -77,7 +81,7 @@ app.get('/bot/:botID', async (req, res) => {
     
     let avatar = await resolveImage(bot_avatar);
     
-    let icon = await resolveImage('https://cdn.discordapp.com/attachments/653733403841134600/1077397487100375050/InfinityNewTrans.png');
+    let icon = await resolveImage('https://cdn.infinitybots.xyz/images/png/Infinity.png');
     
     let image;
 
@@ -223,7 +227,6 @@ app.get('/bot/:botID', async (req, res) => {
     res.end(await image.toBuffer(), 'binary');
 
   } catch (err) {
-
     return res.status(500).json({
       message: 'Hang on chief! Something done broke',
       error_msg: `${err.message}`,
