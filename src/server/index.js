@@ -28,7 +28,7 @@ const themes = {
 	"violet": "#8b5cec",
 	"blue": "#3b82f6",
 	"rose": "#ef4444",
-	"amber": "#10b981",
+	"amber": "#f59e0b",
 	"emerald": "#10b981",
 	"summer": "#e35335",
 	"default": "#472782"
